@@ -3,6 +3,9 @@ from flask import Flask, json, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
+from sqlalchemy.orm import query
+
+from sqlalchemy.orm.query import Query
 
 from models import setup_db, Question, Category
 
@@ -79,7 +82,7 @@ def create_app(test_config=None):
     return jsonify({
       'success': True,
       'questions': questions,
-      'totalQuestions': len(questions),
+      'total_questions': len(questions),
       'categories': parse_categories(category_objects),
       'currentCategory': None
     })
@@ -91,6 +94,21 @@ def create_app(test_config=None):
   TEST: When you click the trash icon next to a question, the question will be removed.
   This removal will persist in the database and when you refresh the page. 
   '''
+  @app.route('/questions/<int:question_id>', methods=['DELETE'])
+  def delete_question(question_id):
+    try:
+      question = Question.query.get(question_id)
+      if question is None:
+        abort(404)
+      else:
+        question.delete()
+        return jsonify({
+          'success': True,
+          'deleted': question_id
+        })
+    except Exception as e:
+      print(e)
+      abort(422)
 
   '''
   @TODO: 
@@ -102,7 +120,36 @@ def create_app(test_config=None):
   the form will clear and the question will appear at the end of the last page
   of the questions list in the "List" tab.  
   '''
-
+  @app.route('/questions', methods=['POST'])
+  def add_or_search_question():
+    data = request.get_json()
+    print(data)
+    page = request.args.get('page', 1, int)
+    # add_question
+    if not data.get('searchTerm'):
+      try:
+        new_question = Question(question=data['question'],
+                                answer=data['answer'],
+                                difficulty=data['difficulty'],
+                                category=data['category'])
+        new_question.insert()
+        return jsonify({
+          'success': True
+        })
+      except Exception as e:
+        print(e)
+        abort(422)
+    # search
+    else:
+      term = data.get('searchTerm')
+      questions = Question.query.filter(Question.question.ilike(f'%{term}%')).all()
+      if len(questions)  == 0:
+        abort(404)
+      return jsonify({
+        'success': True,
+        'questions': paginate(page, questions),
+        'total_questions': len(questions)
+      })
   '''
   @TODO: 
   Create a POST endpoint to get questions based on a search term. 
@@ -122,8 +169,18 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
-
-
+  @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+  def get_questions_by_category_id(category_id):
+    questions = Question.query.filter_by(category=category_id).all()
+    if len(questions) == 0:
+      abort(404)
+    page = request.args.get('page', 1, int)
+    return jsonify({
+      'success': True,
+      'questions': paginate(page, questions),
+      'total_questions': len(questions),
+      'current_category': category_id
+    })
   '''
   @TODO: 
   Create a POST endpoint to get questions to play the quiz. 
@@ -135,7 +192,25 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+  @app.route('/quizzes', methods=['POST'])
+  def get_question_for_play():
+    data = request.get_json()
+    previous_questions = data.get('previous_questions')
+    quiz_category = data.get('quiz_category')
+    print(previous_questions, quiz_category)
 
+    if quiz_category['id'] == 0: # ALL categories
+      questions = Question.query.filter(Question.id.notin_(previous_questions)).all()
+    else:    
+      questions = Question.query.filter(Question.id.notin_(previous_questions)) \
+                                  .filter_by(category=quiz_category['id']) \
+                                  .all()
+
+    return jsonify({
+      'success': True,
+      'question': questions[random.randint(0, len(questions) - 1)].format() \
+                  if len(questions) != 0 else None
+    })
   '''
   @TODO: 
   Create error handlers for all expected errors 
