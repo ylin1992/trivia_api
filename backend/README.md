@@ -41,7 +41,7 @@ flask run --reload
 The `--reload` flag will detect file changes and restart the server automatically.
 
 
-### API References
+# API References
 
 ## Getting Started
 - Base URL: The api is not hosted as a base URL, instead, connect ```http://127.0.0.1:5000/``` or ```http://localhost:5000/``` to your frontend application
@@ -63,7 +63,7 @@ The API supports two types of status code
 
 ## Endpoints
 
-# GET/ categories
+### GET/ categories
 - General: Returns all categories, containing success flag and an array of categories, in which each category contains its type and id
 - Example: ```curl http://localhost:5000/categories```
 ```
