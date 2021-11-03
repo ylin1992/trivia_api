@@ -87,7 +87,6 @@ def create_app(test_config=None):
       'questions': questions,
       'total_questions': len(question_objects),
       'categories': parse_categories(category_objects),
-      'currentCategory': None
     })
   
   '''
