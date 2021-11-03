@@ -40,6 +40,14 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
+***NOTICE:*** Some secret variables have to be set in environemt variables, be sure to set all coresponding value to your OS, i.e., for Mac users, execute the following scripts in terminal
+```
+export DB_HOST='db_port'
+export DB_USER='user_name'
+export DB_PWD='user_pwd'
+export DB_NAME='db_name'
+``` 
+Refer to ```models.py``` for more information
 
 # API References
 
