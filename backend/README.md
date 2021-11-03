@@ -40,44 +40,47 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## ToDo Tasks
-These are the files you'd want to edit in the backend:
 
-1. *./backend/flaskr/`__init__.py`*
-2. *./backend/test_flaskr.py*
+### API References
+
+## Getting Started
+- Base URL: The api is not hosted as a base URL, instead, connect ```http://127.0.0.1:5000/``` or ```http://localhost:5000/``` to your frontend application
+
+- Authentication: No authentication is required in this application 
+
+## Error Handling
+Errors are returned in JSON format:
+```
+{
+    "success": False, 
+    "error": 400,
+    "message": "bad request"
+}
+```
+The API supports two types of status code
+- 404: Data not found
+- 422: Unproccessable
+
+## Endpoints
+
+# GET/ categories
+- General: Returns all categories, containing success flag and an array of categories, in which each category contains its type and id
+- Example: ```curl http://localhost:5000/categories```
+```
+{
+  "categories": {
+    "1": "Science", 
+    "2": "Art", 
+    "3": "Geography", 
+    "4": "History", 
+    "5": "Entertainment", 
+    "6": "Sports"
+  }, 
+  "success": true
+}
+```
 
 
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior. 
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers. 
-
-
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories. 
-
-
-3. Create an endpoint to handle GET requests for all available categories. 
-
-
-4. Create an endpoint to DELETE question using a question ID. 
-
-
-5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
-
-
-6. Create a POST endpoint to get questions based on category. 
-
-
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
-
-
-8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
-
-
-9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
-
-
-
-## Review Comment to the Students
 ```
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 
