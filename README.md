@@ -52,4 +52,4 @@ npm start
 
 
 # Author
-The project is a template of [https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd0044?gclid=Cj0KCQjw5oiMBhDtARIsAJi0qk1evjd3o2g1P_fN7k7w61V1LoQb26TlotiBybLPsTh7dqdGsz8d42oaAiOpEALw_wcB&utm_campaign=12908932988_c&utm_keyword=udacity%20full%20stack_e&utm_medium=ads_r&utm_source=gsem_brand&utm_term=124509199111](Udacity Fullstack Development Nano Degree).
+The project is a template of [Udacity Fullstack Development Nano Degree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd0044?gclid=Cj0KCQjw5oiMBhDtARIsAJi0qk1evjd3o2g1P_fN7k7w61V1LoQb26TlotiBybLPsTh7dqdGsz8d42oaAiOpEALw_wcB&utm_campaign=12908932988_c&utm_keyword=udacity%20full%20stack_e&utm_medium=ads_r&utm_source=gsem_brand&utm_term=124509199111).
