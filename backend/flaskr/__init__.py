@@ -251,4 +251,11 @@ def create_app(test_config=None):
 
   return app
 
+  @app.errorhandler(500)
+  def internal_error(error):
+    return jsonify({
+      'success': False,
+      'error': 500,
+      'message': 'Internal error'
+  }), 500
     

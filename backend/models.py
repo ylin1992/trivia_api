@@ -3,8 +3,23 @@ from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 
-database_name = "trivia"
-database_path = "postgresql://{}@{}/{}".format('ewan','localhost:5432', database_name)
+# -------------------------------------------------
+# hide secret value in environment variables,
+# before starting server, set all the corresponding 
+# variables to OS
+# i.e. for Mac users
+# export DB_HOST='db_port'
+# export DB_USER='user_name'
+# export DB_PWD='user_pwd'
+# export DB_NAME='db_name'
+# ------------------------------------------------- 
+DB_HOST = os.getenv('DB_HOST', '127.0.0.1:5432')
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_PWD  = os.getenv('DB_PWD', 'postgres')
+DB_NAME = os.getenv('DB_NAME', 'trivia')
+
+DB_PATH = 'postgresql+psycopg2://{}:{}@{}/{}'.format(DB_USER, DB_PWD, DB_HOST, DB_NAME)
+
 
 db = SQLAlchemy()
 
@@ -12,7 +27,7 @@ db = SQLAlchemy()
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
-def setup_db(app, database_path=database_path):
+def setup_db(app, database_path=DB_PATH):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
