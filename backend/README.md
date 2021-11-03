@@ -60,6 +60,7 @@ Errors are returned in JSON format:
 The API supports two types of status code
 - 404: Data not found
 - 422: Unproccessable
+- 400: Bad request
 
 ## Endpoints
 
@@ -236,29 +237,106 @@ The endpoints in general returns 422 error if it does not recieve JSON objects c
     - ```answer```: answer to the question
     - ```difficulty```: from 1~5, diffuclty out of the range will trigger 422 error
     - ```category```: from 0~6, category out of this range will trigger 422 error
-- Returns a success flag and description of newly created question
+- Returns a success flag and description of the newly created question
+Example: ```curl -X POST http://localhost:5000/questions -H 'Content-Type: application/json' -d '{"question": "q1", "answer":"a1", "difficulty":1, "category":1}'```
 ```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
-
-Endpoints
-GET '/api/v1.0/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/api/v1.0/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
+{
+  "question": {
+    "answer": "a1", 
+    "category": 1, 
+    "difficulty": 1, 
+    "id": 28, 
+    "question": "q1"
+  }, 
+  "success": true
+}
+```
+### GET /categories/<int:category_id>/questions
+- Get all questions in the given category, paginated in 10 questions per page
+- Returns a success flag, a paginated question list, number of total question in the category and current_category indicating the category_id in the query
+- Throws 404 error if no question is found
+- Example: ```curl http://localhost:5000/categories/1/questions```
+```
+{
+  "current_category": 1, 
+  "questions": [
+    {
+      "answer": "The Liver", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 20, 
+      "question": "What is the heaviest organ in the human body?"
+    }, 
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+    {
+      "answer": "Blood", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 22, 
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }, 
+    {
+      "answer": "3", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 24, 
+      "question": "1+2"
+    }, 
+    {
+      "answer": "a1", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 26, 
+      "question": "q1"
+    }, 
+    {
+      "answer": "a1", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 28, 
+      "question": "q1"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 6
+}
 ```
 
+### POST /quizzes
+- Input an array of past questions' id and a category object, return a randomly picked question which is not in the list of past question array
+- Input:
+    - ```previous_question```: an array of question id of which the question hasn't been used
+    - ```quiz_category```: a JSON object containg the type and id of the selected category
+    Note: send id = 0, category = "type: Click" for all categories (examplify as below)
+    ```
+    {
+        previous_question: [],
+        quiz_category: {
+            type: 'Click',
+            id: 0
+        }
+    }
+    ```
+- Return: a randonly picked question and a success flag
+- Example: ```curl -X POST http://localhost:5000/quizzes -H 'Content-Type: application/json' -d '{"previous_questions":[], "quiz_category":{"type": "Science", "id": 1}}'  ```
+```
+{
+  "question": {
+    "answer": "Alexander Fleming", 
+    "category": 1, 
+    "difficulty": 3, 
+    "id": 21, 
+    "question": "Who discovered penicillin?"
+  }, 
+  "success": true
+}
+```
 
 ## Testing
 To run the tests, run

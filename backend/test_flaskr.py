@@ -61,12 +61,12 @@ class TriviaTestCase(unittest.TestCase):
     # ------------------------------------------------------------------
     def test_get_all_questions_and_paginate(self):
         expected = Question.query.all()
-        epected_length = 10 if len(expected) >= 10 else len(expected)
+        expected_length = len(expected)
         res = self.client().get('/questions')
         data = json.loads(res.data)
         
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['total_questions'], epected_length)
+        self.assertEqual(data['total_questions'], expected_length)
         self.assertTrue(data['success'])
 
     def test_get_all_questions_wit_empty_database(self):
@@ -121,6 +121,15 @@ class TriviaTestCase(unittest.TestCase):
                                                     'answer': 'a1',
                                                     'difficulty': 100,
                                                     'category': 1})
+        self.assertEqual(res.status_code, 422)
+        data = json.loads(res.data)
+        self.assertFalse(data['success'])
+    
+    def test_422_post_invalid_category(self):
+        res = self.client().post('/questions', json={'question': 'q1', 
+                                            'answer': 'a1',
+                                            'difficulty': 1,
+                                            'category': 'some_category'})
         self.assertEqual(res.status_code, 422)
         data = json.loads(res.data)
         self.assertFalse(data['success'])
