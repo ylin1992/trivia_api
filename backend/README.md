@@ -175,7 +175,7 @@ The API supports two types of status code
 ### DELETE /questions/<int:question_id>
 - General: Input question's id as an integer and delete the the question corresponding to the id
 - Returns a success flag and id of the deleted question
-- Returns 422 if no corresponding question is found
+- Throws 422 error if no corresponding question is found
 - Example: normal input: ```curl -X DELETE http://localhost:5000/questions/16```
 ```
 {
@@ -191,6 +191,52 @@ The API supports two types of status code
   "success": true
 }
 ```
+
+### POST /questions
+POST supports two functionalities, "search a question" and "create a new question"
+The endpoints in general returns 422 error if it does not recieve JSON objects containing corresponding key (which will be explained below)
+1. Search
+- Search request can be made by sending JSON object that contains a "searchTerm" key, the server will search through the database to find questions that match the value of "searchTerm" in a case-insensitive manner.
+- Returns a success flag, a paginted question list and the number of found questions
+- Throws 404 error if no question is found
+- Example of normal search: ```curl -X POST http://localhost:5000/questions -H 'Content-Type: application/json' -d '{"searchTerm": "1"}'```
+```
+{
+  "questions": [
+    {
+      "answer": "Edward Scissorhands", 
+      "category": 5, 
+      "difficulty": 3, 
+      "id": 6, 
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }, 
+    {
+      "answer": "3", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 24, 
+      "question": "1+2"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 2
+}
+```
+- Example of not found error: ```curl -X POST http://localhost:5000/questions -H 'Content-Type: application/json' -d '{"searchTerm": "q"}'```
+```
+{
+  "error": 404, 
+  "message": "Data not found", 
+  "success": false
+}
+```
+2. Create a new question:
+- Create request can be made by sending JSON object that does not contain "searchTerm" key, instead, keys listed below are strictly required.
+-- ```question```: description of the new question
+-- ```answer```: answer to the question
+-- ```difficulty```: from 1~5, diffuclty out of the range will trigger 422 error
+-- ```category```: from 0~6, category out of this range will trigger 422 error
+- Returns a success flag and description of newly created question
 ```
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
 

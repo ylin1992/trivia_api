@@ -137,7 +137,8 @@ def create_app(test_config=None):
                                 category=data['category'])
         new_question.insert()
         return jsonify({
-          'success': True
+          'success': True,
+          'question': new_question.format()
         })
       except Exception as e:
         print(e)
