@@ -232,10 +232,10 @@ The endpoints in general returns 422 error if it does not recieve JSON objects c
 ```
 2. Create a new question:
 - Create request can be made by sending JSON object that does not contain "searchTerm" key, instead, keys listed below are strictly required.
--- ```question```: description of the new question
--- ```answer```: answer to the question
--- ```difficulty```: from 1~5, diffuclty out of the range will trigger 422 error
--- ```category```: from 0~6, category out of this range will trigger 422 error
+    - ```question```: description of the new question
+    - ```answer```: answer to the question
+    - ```difficulty```: from 1~5, diffuclty out of the range will trigger 422 error
+    - ```category```: from 0~6, category out of this range will trigger 422 error
 - Returns a success flag and description of newly created question
 ```
 This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
